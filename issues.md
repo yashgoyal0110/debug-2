@@ -48,8 +48,13 @@ Opening the upcoming events feed fails with a `500 Internal server error` instea
 When an admin updates an event's details (such as changing its ticket price or venue), the response immediately returned by the update request still displays the old values from before the edit.
 
 **Steps to reproduce**
-1. Log in / authenticate as Admin (`admin-token-111`).
-2. Update *Node.js Backend Bootcamp* (`673000000000000000000101`) with `{ "price": 899 }`.
+1. Log in as Admin to get the token (`admin-token-111`):
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "admin@eventhive.com", "password": "admin123"}'
+   ```
+2. Using `Authorization: Bearer admin-token-111`, update *Node.js Backend Bootcamp* (`673000000000000000000101`) with `{ "price": 899 }`.
 3. **Expected:** `200 OK` with `"price": 899` in the returned event object.
 4. **Actual:** `200 OK`, but the returned event object still shows `"price": 799`.
 
@@ -65,8 +70,13 @@ When an admin updates an event's details (such as changing its ticket price or v
 When an attendee tries to open the details of their own booking, the server rejects the request with `403 You are not allowed to view this booking`.
 
 **Steps to reproduce**
-1. Authenticate as Rahul (`rahul-token-222`).
-2. Fetch the details of Rahul's booking (`673000000000000000000202`).
+1. Log in as Rahul to get his token (`rahul-token-222`):
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "rahul@mail.com", "password": "rahul123"}'
+   ```
+2. Using `Authorization: Bearer rahul-token-222`, fetch the details of Rahul's booking (`673000000000000000000202`).
 3. **Expected:** `200 OK` with Rahul's booking details. (Priya should still get `403`, and Admin should get `200`.)
 4. **Actual:** Rahul gets `403 You are not allowed to view this booking`.
 
@@ -82,8 +92,13 @@ When an attendee tries to open the details of their own booking, the server reje
 `TECH20` is supposed to give **20% off up to a maximum discount of ₹300**. Instead, orders under ₹1,500 receive a flat ₹300 discount, and larger orders receive uncapped 20% discounts above ₹300.
 
 **Steps to reproduce**
-1. Authenticate as Rahul (`rahul-token-222`).
-2. Validate promo code `TECH20` for an `orderAmount` of `1000`.
+1. Log in as Rahul (`rahul-token-222`):
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "rahul@mail.com", "password": "rahul123"}'
+   ```
+2. Using `Authorization: Bearer rahul-token-222`, validate promo code `TECH20` for an `orderAmount` of `1000`.
 3. Validate promo code `TECH20` for an `orderAmount` of `3000`.
 4. **Expected:**
    - For `1000`: 20% is `200` (`finalAmount: 800`).
@@ -120,8 +135,13 @@ Filtering events with `minPrice` alone works, and `maxPrice` alone works. Howeve
 An attendee is only allowed to hold at most **4 confirmed seats in total for the same event**. However, if a user already has 1–3 seats booked for an event, the system still lets them book up to 4 additional seats in a second booking, exceeding the 4-seat per-user limit.
 
 **Steps to reproduce**
-1. Authenticate as Rahul (`rahul-token-222`), who already has `1` confirmed seat for *Node.js Backend Bootcamp* (`673000000000000000000101`).
-2. Book `4` more seats for *Node.js Backend Bootcamp* (`673000000000000000000101`).
+1. Log in as Rahul (`rahul-token-222`), who already has `1` confirmed seat for *Node.js Backend Bootcamp* (`673000000000000000000101`):
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "rahul@mail.com", "password": "rahul123"}'
+   ```
+2. Using `Authorization: Bearer rahul-token-222`, book `4` more seats for *Node.js Backend Bootcamp* (`673000000000000000000101`).
 3. **Expected:** `400 You can hold at most 4 seats per event (you already have 1)`.
 4. **Actual:** `201 Created` — the booking succeeds, giving Rahul 5 confirmed seats for the same event.
 
@@ -137,7 +157,17 @@ An attendee is only allowed to hold at most **4 confirmed seats in total for the
 *System Design Masterclass* (`673000000000000000000104`) is currently sold out (`availableSeats: 0`). Priya has a confirmed booking for 2 seats (`673000000000000000000201`). When Priya cancels her booking, the cancellation response shows the booking as `cancelled` and shows `availableSeats: 2` on the event — yet when Rahul immediately tries to book 1 seat for that event (or checks the event page), the event is still sold out with `0` seats available.
 
 **Steps to reproduce**
-1. Authenticate as Priya (`priya-token-333`) and cancel her booking (`673000000000000000000201`).
-2. Authenticate as Rahul (`rahul-token-222`) and try to book `1` seat for *System Design Masterclass* (`673000000000000000000104`), or fetch the event details.
+1. Log in as Priya (`priya-token-333`) and cancel her booking (`673000000000000000000201`):
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "priya@mail.com", "password": "priya123"}'
+   ```
+2. Log in as Rahul (`rahul-token-222`) and try to book `1` seat for *System Design Masterclass* (`673000000000000000000104`), or fetch the event details:
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/login \
+     -H "Content-Type: application/json" \
+     -d '{"email": "rahul@mail.com", "password": "rahul123"}'
+   ```
 3. **Expected:** The event now has `2` seats available in the database, and Rahul's booking for `1` seat succeeds (`201 Created`, leaving `1` seat available).
 4. **Actual:** Rahul's booking fails with `400 Only 0 seat(s) left for System Design Masterclass`, and fetching the event still shows `"availableSeats": 0`.

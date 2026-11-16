@@ -56,7 +56,7 @@ src/
 
 ## Authentication
 
-Send the user token in the `Authorization` header:
+Log in to get a user's token, or pass the token directly in the `Authorization` header:
 
 ```
 Authorization: Bearer <token>
@@ -67,6 +67,29 @@ Authorization: Bearer <token>
 | Aisha Khan   | admin@eventhive.com  | admin123 | admin    | `admin-token-111` |
 | Rahul Verma  | rahul@mail.com       | rahul123 | attendee | `rahul-token-222` |
 | Priya Sharma | priya@mail.com       | priya123 | attendee | `priya-token-333` |
+
+### Login & Auth `curl` Commands
+
+```bash
+# Login as Admin (Aisha)
+curl -X POST http://localhost:4000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@eventhive.com", "password": "admin123"}'
+
+# Login as Rahul (Attendee)
+curl -X POST http://localhost:4000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "rahul@mail.com", "password": "rahul123"}'
+
+# Login as Priya (Attendee)
+curl -X POST http://localhost:4000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "priya@mail.com", "password": "priya123"}'
+
+# Verify logged-in profile (/api/auth/me)
+curl http://localhost:4000/api/auth/me \
+  -H "Authorization: Bearer rahul-token-222"
+```
 
 ---
 
