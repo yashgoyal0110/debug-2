@@ -7,9 +7,10 @@ import Promo from '../models/promo.model.js';
 
 export const SEED_IDS = {
   users: {
-    admin: '673000000000000000000001',
-    rahul: '673000000000000000000002',
-    priya: '673000000000000000000003',
+    nisha: '673000000000000000000001',
+    rohit: '673000000000000000000002',
+    riya: '673000000000000000000003',
+    yash: '673000000000000000000004',
   },
   events: {
     nodeBootcamp: '673000000000000000000101',
@@ -20,35 +21,43 @@ export const SEED_IDS = {
     pastMeetup: '673000000000000000000106',
   },
   bookings: {
-    priyaBooking: '673000000000000000000201',
-    rahulBooking: '673000000000000000000202',
+    riyaBooking: '673000000000000000000201',
+    rohitBooking: '673000000000000000000202',
   },
 };
 
 const users = [
   {
-    _id: SEED_IDS.users.admin,
-    name: 'Aisha Khan',
-    email: 'admin@eventhive.com',
-    password: 'admin123',
+    _id: SEED_IDS.users.nisha,
+    name: 'Nisha Gupta',
+    email: 'nisha@eventhive.com',
+    password: 'nisha123',
     role: 'admin',
-    token: 'admin-token-111',
+    token: 'nisha-token-111',
   },
   {
-    _id: SEED_IDS.users.rahul,
-    name: 'Rahul Verma',
-    email: 'rahul@mail.com',
-    password: 'rahul123',
+    _id: SEED_IDS.users.rohit,
+    name: 'Rohit Malhotra',
+    email: 'rohit@mail.com',
+    password: 'rohit123',
     role: 'attendee',
-    token: 'rahul-token-222',
+    token: 'rohit-token-222',
   },
   {
-    _id: SEED_IDS.users.priya,
-    name: 'Priya Sharma',
-    email: 'priya@mail.com',
-    password: 'priya123',
+    _id: SEED_IDS.users.riya,
+    name: 'Riya Kapoor',
+    email: 'riya@mail.com',
+    password: 'riya123',
     role: 'attendee',
-    token: 'priya-token-333',
+    token: 'riya-token-333',
+  },
+  {
+    _id: SEED_IDS.users.yash,
+    name: 'Yash Goyal',
+    email: 'yash@mail.com',
+    password: 'yash123',
+    role: 'attendee',
+    token: 'yash-token-444',
   },
 ];
 
@@ -98,7 +107,7 @@ const events = [
     date: new Date('2027-02-28T11:00:00.000Z'),
     price: 1200,
     totalSeats: 20,
-    availableSeats: 0, // Currently sold out (Priya holds 2 seats)
+    availableSeats: 0, // Currently sold out (Riya holds 2 seats)
     isPublished: true,
   },
   {
@@ -129,8 +138,8 @@ const events = [
 
 const bookings = [
   {
-    _id: SEED_IDS.bookings.priyaBooking,
-    user: SEED_IDS.users.priya,
+    _id: SEED_IDS.bookings.riyaBooking,
+    user: SEED_IDS.users.riya,
     event: SEED_IDS.events.systemDesign,
     seats: 2,
     ticketPrice: 1200,
@@ -141,8 +150,8 @@ const bookings = [
     status: 'confirmed',
   },
   {
-    _id: SEED_IDS.bookings.rahulBooking,
-    user: SEED_IDS.users.rahul,
+    _id: SEED_IDS.bookings.rohitBooking,
+    user: SEED_IDS.users.rohit,
     event: SEED_IDS.events.nodeBootcamp,
     seats: 1,
     ticketPrice: 799,

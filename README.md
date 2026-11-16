@@ -62,33 +62,39 @@ Log in to get a user's token, or pass the token directly in the `Authorization` 
 Authorization: Bearer <token>
 ```
 
-| User         | Email                | Password | Role     | Token             |
-| ------------ | -------------------- | -------- | -------- | ----------------- |
-| Aisha Khan   | admin@eventhive.com  | admin123 | admin    | `admin-token-111` |
-| Rahul Verma  | rahul@mail.com       | rahul123 | attendee | `rahul-token-222` |
-| Priya Sharma | priya@mail.com       | priya123 | attendee | `priya-token-333` |
+| User           | Email               | Password | Role     | Token             |
+| -------------- | ------------------- | -------- | -------- | ----------------- |
+| Nisha Gupta    | nisha@eventhive.com | nisha123 | admin    | `nisha-token-111` |
+| Rohit Malhotra | rohit@mail.com      | rohit123 | attendee | `rohit-token-222` |
+| Riya Kapoor    | riya@mail.com       | riya123  | attendee | `riya-token-333`  |
+| Yash Goyal     | yash@mail.com       | yash123  | attendee | `yash-token-444`  |
 
 ### Login & Auth `curl` Commands
 
 ```bash
-# Login as Admin (Aisha)
+# Login as Nisha (Admin)
 curl -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "admin@eventhive.com", "password": "admin123"}'
+  -d '{"email": "nisha@eventhive.com", "password": "nisha123"}'
 
-# Login as Rahul (Attendee)
+# Login as Rohit (Attendee)
 curl -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "rahul@mail.com", "password": "rahul123"}'
+  -d '{"email": "rohit@mail.com", "password": "rohit123"}'
 
-# Login as Priya (Attendee)
+# Login as Riya (Attendee)
 curl -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "priya@mail.com", "password": "priya123"}'
+  -d '{"email": "riya@mail.com", "password": "riya123"}'
+
+# Login as Yash (Attendee)
+curl -X POST http://localhost:4000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "yash@mail.com", "password": "yash123"}'
 
 # Verify logged-in profile (/api/auth/me)
 curl http://localhost:4000/api/auth/me \
-  -H "Authorization: Bearer rahul-token-222"
+  -H "Authorization: Bearer rohit-token-222"
 ```
 
 ---
@@ -106,10 +112,10 @@ curl http://localhost:4000/api/auth/me \
 | `673000000000000000000106` | Open Source Dev Meetup 2024       | `tech`     | Bengaluru | ₹0    | 10 / 80         | 2024-08-12 |
 
 ### Bookings
-| ID                         | Attendee     | Event                     | Seats | Total | Status      |
-| -------------------------- | ------------ | ------------------------- | ----- | ----- | ----------- |
-| `673000000000000000000201` | Priya Sharma | System Design Masterclass | 2     | ₹2400 | `confirmed` |
-| `673000000000000000000202` | Rahul Verma  | Node.js Backend Bootcamp  | 1     | ₹799  | `confirmed` |
+| ID                         | Attendee       | Event                     | Seats | Total | Status      |
+| -------------------------- | -------------- | ------------------------- | ----- | ----- | ----------- |
+| `673000000000000000000201` | Riya Kapoor    | System Design Masterclass | 2     | ₹2400 | `confirmed` |
+| `673000000000000000000202` | Rohit Malhotra | Node.js Backend Bootcamp  | 1     | ₹799  | `confirmed` |
 
 ### Promo Codes
 | Code      | Type      | Value | Max Discount | Min Amount | Status  |
