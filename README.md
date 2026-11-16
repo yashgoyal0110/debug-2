@@ -2,7 +2,7 @@
 
 An event & workshop ticketing backend built with **Node.js, Express, and MongoDB (Mongoose)**, following a clean **Routes → Controllers → Services → Models** architecture.
 
-> 🐞 This project has **6 known bugs** (2 Easy, 3 Medium, 1 Hard). Your job is to find and fix them.
+> 🐞 This project has **7 known bugs** (2 Easy, 4 Medium, 1 Hard). Your job is to find and fix them.
 > See [`issues.md`](issues.md).
 
 ---
@@ -119,7 +119,7 @@ Authorization: Bearer <token>
 ### Bookings
 | Method | Endpoint                     | Auth     | Body / Notes |
 | ------ | ---------------------------- | -------- | ------------ |
-| POST   | `/api/bookings`              | ✅       | `{ eventId, seats, promoCode? }` (max 6 seats per booking) |
+| POST   | `/api/bookings`              | ✅       | `{ eventId, seats, promoCode? }` (max 4 confirmed seats per user per event) |
 | GET    | `/api/bookings`              | ✅       | Logged-in user's bookings |
 | GET    | `/api/bookings/:id`          | ✅       | Booking owner or admin only |
 | PATCH  | `/api/bookings/:id/cancel`   | ✅       | Booking owner only (while `confirmed`); releases seats back to the event |

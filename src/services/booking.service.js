@@ -3,7 +3,7 @@ import Event from '../models/event.model.js';
 import ApiError from '../utils/ApiError.js';
 import promoService from './promo.service.js';
 
-const MAX_TICKETS_PER_BOOKING = 6;
+const MAX_SEATS_PER_USER = 4;
 
 const createBooking = async (userId, { eventId, seats, promoCode }) => {
   if (!eventId || !seats) {
@@ -11,8 +11,8 @@ const createBooking = async (userId, { eventId, seats, promoCode }) => {
   }
 
   const seatCount = Number(seats);
-  if (!Number.isInteger(seatCount) || seatCount < 1 || seatCount > MAX_TICKETS_PER_BOOKING) {
-    throw new ApiError(400, `You can book between 1 and ${MAX_TICKETS_PER_BOOKING} seats at a time`);
+  if (!Number.isInteger(seatCount) || seatCount < 1 || seatCount > MAX_SEATS_PER_USER) {
+    throw new ApiError(400, `You can book between 1 and ${MAX_SEATS_PER_USER} seats at a time`);
   }
 
   const event = await Event.findById(eventId);
@@ -22,6 +22,21 @@ const createBooking = async (userId, { eventId, seats, promoCode }) => {
 
   if (new Date(event.date) < new Date()) {
     throw new ApiError(400, 'Cannot book tickets for a past event');
+  }
+
+  // Each attendee can hold at most MAX_SEATS_PER_USER confirmed seats per event
+  const existingBookings = await Booking.find({
+    user: userId,
+    event: eventId,
+    status: 'confirmed',
+  });
+  const alreadyBookedSeats = existingBookings.reduce((sum, b) => sum + b.seats, 0);
+
+  if (alreadyBookedSeats >= MAX_SEATS_PER_USER) {
+    throw new ApiError(
+      400,
+      `You can hold at most ${MAX_SEATS_PER_USER} seats per event (you already have ${alreadyBookedSeats})`
+    );
   }
 
   if (event.availableSeats < seatCount) {

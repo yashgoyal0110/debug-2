@@ -9,7 +9,8 @@
 | 03 | Medium | Mongoose `ObjectId` comparison | `src/services/booking.service.js` → `getBookingById`  | Compare ObjectIds with `.toString()` or `.equals()` instead of `!==` |
 | 04 | Medium | Business logic (`maxDiscount`) | `src/services/promo.service.js` → `calculateDiscount` | Use `Math.min(discount, promo.maxDiscount)` instead of `Math.max(...)` |
 | 05 | Medium | Query filter object overwrite  | `src/services/event.service.js` → `getAllEvents`      | Merge `$gte` and `$lte` into `filter.price` instead of reassigning `filter.price` |
-| 06 | Hard   | Populated Mongoose ref save    | `src/services/booking.service.js` → `cancelBooking`   | Call `await booking.event.save()` in addition to `await booking.save()` |
+| 06 | Medium | Cumulative limit check logic   | `src/services/booking.service.js` → `createBooking`   | Check `alreadyBookedSeats + seatCount > MAX_SEATS_PER_USER` instead of `alreadyBookedSeats >= MAX_SEATS_PER_USER` |
+| 07 | Hard   | Populated Mongoose ref save    | `src/services/booking.service.js` → `cancelBooking`   | Call `await booking.event.save()` in addition to `await booking.save()` |
 
 ---
 
@@ -108,7 +109,32 @@
 
 ---
 
-### 🔴 BUG-06: Cancelled booking seats are never actually released for other users to book
+### 🟡 BUG-06: Attendees can bypass the 4-seat per-event limit by making multiple bookings
+
+- **Root cause:** In `src/services/booking.service.js` (`createBooking`), the per-user seat limit check only checks how many seats the user **already** has before the new booking, forgetting to add `seatCount` (the seats requested in the current booking):
+  ```js
+  if (alreadyBookedSeats >= MAX_SEATS_PER_USER) {
+  ```
+  If a user has `1`, `2`, or `3` seats already booked (`< 4`), they pass the check even if requesting `4` more seats puts them at `5–7` total seats.
+- **Fix (`src/services/booking.service.js`):**
+  ```js
+  if (alreadyBookedSeats + seatCount > MAX_SEATS_PER_USER) {
+    throw new ApiError(
+      400,
+      `You can hold at most ${MAX_SEATS_PER_USER} seats per event (you already have ${alreadyBookedSeats})`
+    );
+  }
+  ```
+- **Verify:**
+  ```bash
+  curl -X POST http://localhost:4000/api/bookings \
+    -H "Authorization: Bearer rahul-token-222" -H "Content-Type: application/json" \
+    -d '{"eventId": "673000000000000000000101", "seats": 4}'
+  ```
+
+---
+
+### 🔴 BUG-07: Cancelled booking seats are never actually released for other users to book
 
 - **Root cause:** In `src/services/booking.service.js` (`cancelBooking`):
   ```js

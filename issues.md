@@ -9,7 +9,8 @@ Track your progress by checking off each bug as you fix and verify it.
 - [ ] **BUG-03** (🟡 Medium): Attendees cannot view their own booking details
 - [ ] **BUG-04** (🟡 Medium): Percentage promo code calculates the wrong discount
 - [ ] **BUG-05** (🟡 Medium): Price range filter ignores the minimum price when both bounds are set
-- [ ] **BUG-06** (🔴 Hard): Cancelled booking seats are never actually released for other users to book
+- [ ] **BUG-06** (🟡 Medium): Attendees can bypass the 4-seat per-event limit by making multiple bookings
+- [ ] **BUG-07** (🔴 Hard): Cancelled booking seats are never actually released for other users to book
 
 ---
 
@@ -109,7 +110,24 @@ Filtering events with `minPrice` alone works, and `maxPrice` alone works. Howeve
 
 ---
 
-## 🔴 BUG-06: Cancelled booking seats are never actually released for other users to book
+## 🟡 BUG-06: Attendees can bypass the 4-seat per-event limit by making multiple bookings
+
+- [ ] Fixed
+
+**Difficulty:** Medium
+
+**Issue**
+An attendee is only allowed to hold at most **4 confirmed seats in total for the same event**. However, if a user already has 1–3 seats booked for an event, the system still lets them book up to 4 additional seats in a second booking, exceeding the 4-seat per-user limit.
+
+**Steps to reproduce**
+1. Authenticate as Rahul (`rahul-token-222`), who already has `1` confirmed seat for *Node.js Backend Bootcamp* (`673000000000000000000101`).
+2. Book `4` more seats for *Node.js Backend Bootcamp* (`673000000000000000000101`).
+3. **Expected:** `400 You can hold at most 4 seats per event (you already have 1)`.
+4. **Actual:** `201 Created` — the booking succeeds, giving Rahul 5 confirmed seats for the same event.
+
+---
+
+## 🔴 BUG-07: Cancelled booking seats are never actually released for other users to book
 
 - [ ] Fixed
 
