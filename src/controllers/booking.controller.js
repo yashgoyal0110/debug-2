@@ -1,35 +1,79 @@
-import asyncHandler from '../utils/asyncHandler.js';
 import bookingService from '../services/booking.service.js';
 
 // POST /api/bookings
-const createBooking = asyncHandler(async (req, res) => {
-  const booking = await bookingService.createBooking(req.user._id, req.body);
-  res.status(201).json({ success: true, data: booking });
-});
+const createBooking = async (req, res) => {
+  try {
+    const booking = await bookingService.createBooking(req.user._id, req.body);
+    res.status(201).json({ success: true, data: booking });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    if (statusCode === 500) console.error(error);
+    res.status(statusCode).json({
+      success: false,
+      message: statusCode === 500 ? 'Internal server error' : error.message,
+    });
+  }
+};
 
 // GET /api/bookings
-const getMyBookings = asyncHandler(async (req, res) => {
-  const bookings = await bookingService.getBookingsByUser(req.user._id);
-  res.status(200).json({ success: true, count: bookings.length, data: bookings });
-});
+const getMyBookings = async (req, res) => {
+  try {
+    const bookings = await bookingService.getBookingsByUser(req.user._id);
+    res.status(200).json({ success: true, count: bookings.length, data: bookings });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    if (statusCode === 500) console.error(error);
+    res.status(statusCode).json({
+      success: false,
+      message: statusCode === 500 ? 'Internal server error' : error.message,
+    });
+  }
+};
 
 // GET /api/bookings/:id
-const getBookingById = asyncHandler(async (req, res) => {
-  const booking = await bookingService.getBookingById(req.params.id, req.user);
-  res.status(200).json({ success: true, data: booking });
-});
+const getBookingById = async (req, res) => {
+  try {
+    const booking = await bookingService.getBookingById(req.params.id, req.user);
+    res.status(200).json({ success: true, data: booking });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    if (statusCode === 500) console.error(error);
+    res.status(statusCode).json({
+      success: false,
+      message: statusCode === 500 ? 'Internal server error' : error.message,
+    });
+  }
+};
 
 // PATCH /api/bookings/:id/cancel
-const cancelBooking = asyncHandler(async (req, res) => {
-  const booking = await bookingService.cancelBooking(req.params.id, req.user);
-  res.status(200).json({ success: true, data: booking });
-});
+const cancelBooking = async (req, res) => {
+  try {
+    const booking = await bookingService.cancelBooking(req.params.id, req.user);
+    res.status(200).json({ success: true, data: booking });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    if (statusCode === 500) console.error(error);
+    res.status(statusCode).json({
+      success: false,
+      message: statusCode === 500 ? 'Internal server error' : error.message,
+    });
+  }
+};
 
 // PATCH /api/bookings/:id/check-in (admin)
-const checkInBooking = asyncHandler(async (req, res) => {
-  const booking = await bookingService.checkInBooking(req.params.id);
-  res.status(200).json({ success: true, data: booking });
-});
+const checkInBooking = async (req, res) => {
+  try {
+    const booking = await bookingService.checkInBooking(req.params.id);
+    res.status(200).json({ success: true, data: booking });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    if (statusCode === 500) console.error(error);
+    res.status(statusCode).json({
+      success: false,
+      message: statusCode === 500 ? 'Internal server error' : error.message,
+    });
+  }
+};
 
 export default {
   createBooking,
@@ -38,3 +82,4 @@ export default {
   cancelBooking,
   checkInBooking,
 };
+

@@ -44,14 +44,12 @@ src/
 │   ├── booking.model.js      # Booking schema
 │   └── promo.model.js        # Promo code schema
 ├── routes/                   # URL → controller mapping
-├── controllers/              # reads req, calls service, sends res
+├── controllers/              # reads req, calls service inside try/catch, sends res
 ├── services/                 # business logic + Mongoose queries
 ├── middlewares/
-│   ├── auth.middleware.js    # protect (login check) + authorize (role check)
-│   └── error.middleware.js   # 404 handler + central error handler
+│   └── auth.middleware.js    # protect (login check) + authorize (role check)
 └── utils/
-    ├── ApiError.js           # error class with statusCode
-    └── asyncHandler.js       # forwards async errors to next()
+    └── ApiError.js           # error class with statusCode
 ```
 
 ---
