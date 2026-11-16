@@ -15,9 +15,6 @@ npm install
 # Create your .env file from the example and add your MongoDB URI
 cp .env.example .env
 
-# Seed sample data into MongoDB (run this anytime to reset the database)
-npm run seed
-
 # Start server in development mode with nodemon (auto-reload)
 npm run dev
 # or
@@ -36,8 +33,6 @@ src/
 ├── app.js                    # express app, middlewares, routes
 ├── config/
 │   └── db.js                 # Mongoose connection setup
-├── data/
-│   └── seed.js               # resets & seeds sample users, events, promos, and bookings
 ├── models/
 │   ├── user.model.js         # User schema
 │   ├── event.model.js        # Event schema
@@ -99,7 +94,7 @@ curl http://localhost:4000/api/auth/me \
 
 ---
 
-## Seeded sample data (`npm run seed`)
+## Database sample data
 
 ### Events
 | ID                         | Title                             | Category   | City      | Price | Available Seats | Date       |

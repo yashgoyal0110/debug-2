@@ -16,9 +16,8 @@ Track your progress by checking off each bug as you fix and verify it.
 
 ## Rules
 
-1. Run `npm run seed` before starting (and anytime you want to reset the database back to its initial state).
-2. Do not modify `src/data/seed.js` to fake a fix — all bugs are in the application code.
-3. Each bug is independent and can be fixed in a few lines of code.
+1. Do not modify database documents directly to fake a fix — all bugs are in the application code.
+2. Each bug is independent and can be fixed in a few lines of code.
 
 ---
 
